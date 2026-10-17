@@ -1,0 +1,68 @@
+---
+// Draft copy — swap in the real feature list.
+const features = [
+	{
+		title: 'JavaScript on a switch',
+		body: 'Flip scripts off with one tap. Flip them back when a page actually needs them.',
+	},
+	{
+		title: 'Nothing extra',
+		body: 'No feeds, no clutter. An address bar and the page you asked for.',
+	},
+	{
+		title: 'Lighter pages',
+		body: 'Without scripts most pages load faster and use less data and battery.',
+	},
+];
+---
+
+<section class="features container" aria-labelledby="features-title">
+	<h2 id="features-title">Why Skelly</h2>
+	<ul>
+		{
+			features.map(({ title, body }) => (
+				<li>
+					<h3>{title}</h3>
+					<p>{body}</p>
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.features {
+		padding-block: clamp(3rem, 8vw, 5rem);
+		border-top: 1px solid var(--line);
+	}
+
+	h2 {
+		font-size: clamp(1.5rem, 4vw, 2rem);
+		margin-bottom: 2rem;
+	}
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+	}
+
+	li {
+		display: grid;
+		gap: 0.5rem;
+		padding: 1.5rem;
+		border-radius: 1rem;
+		background: var(--surface);
+	}
+
+	h3 {
+		font-size: 1.125rem;
+	}
+
+	p {
+		color: var(--muted);
+	}
+</style>

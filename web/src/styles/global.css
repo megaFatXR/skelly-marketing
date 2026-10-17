@@ -1,0 +1,85 @@
+:root {
+	--bg: #f4f1ea;
+	--surface: #ebe6db;
+	--text: #161513;
+	--muted: #5c5850;
+	--line: #d6d0c3;
+	--accent: #161513;
+	--accent-text: #f4f1ea;
+
+	--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+	--max-width: 64rem;
+	--gutter: clamp(1rem, 4vw, 2rem);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #111110;
+		--surface: #1b1a18;
+		--text: #f4f1ea;
+		--muted: #a39e93;
+		--line: #2c2a27;
+		--accent: #f4f1ea;
+		--accent-text: #111110;
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-sans);
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	margin: 0;
+}
+
+p {
+	margin: 0;
+}
+
+a {
+	color: inherit;
+}
+
+.container {
+	width: 100%;
+	max-width: var(--max-width);
+	margin-inline: auto;
+	padding-inline: var(--gutter);
+}
+
+.button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.8rem 1.4rem;
+	border-radius: 999px;
+	background: var(--accent);
+	color: var(--accent-text);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.button:focus-visible {
+	outline: 2px solid var(--text);
+	outline-offset: 3px;
+}

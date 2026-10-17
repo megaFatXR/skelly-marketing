@@ -1,0 +1,39 @@
+---
+import { APP_STORE_URL } from '../consts';
+---
+
+<section class="hero container">
+	<p class="eyebrow">skelly</p>
+	<h1>The web, down to the bones.</h1>
+	<p class="lede">
+		A bare-bones browser that puts JavaScript on a switch. Turn it off and
+		pages get lighter, quieter, and out of your way.
+	</p>
+	<a class="button" href={APP_STORE_URL}>Download on the App Store</a>
+</section>
+
+<style>
+	.hero {
+		display: grid;
+		gap: 1.25rem;
+		justify-items: start;
+		padding-block: clamp(4rem, 14vw, 9rem) clamp(3rem, 8vw, 5rem);
+	}
+
+	.eyebrow {
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		color: var(--muted);
+	}
+
+	h1 {
+		font-size: clamp(2.5rem, 8vw, 5rem);
+		max-width: 14ch;
+	}
+
+	.lede {
+		font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+		color: var(--muted);
+		max-width: 38ch;
+	}
+</style>

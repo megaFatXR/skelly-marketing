@@ -5,14 +5,14 @@ import heroImage from '../assets/hero.jpg';
 import { APP_STORE_URL } from '../consts';
 ---
 
-<section class="hero container">
+<section class="hero">
 	<div class="frame">
 		<Picture
 			src={heroImage}
 			alt="Clay diorama of a skeleton in a captain's hat, pipe in its teeth, steering a ship's wheel on a wooden surfboard through a curling wave under a full moon."
 			formats={['avif', 'webp']}
 			widths={[640, 960, 1280, 1600, 2000]}
-			sizes="(min-width: 90rem) 86rem, calc(100vw - 2rem)"
+			sizes="(min-width: 90rem) 86rem, (min-width: 54rem) calc(100vw - 4rem), 100vw"
 			loading="eager"
 			fetchpriority="high"
 		/>
@@ -32,9 +32,12 @@ import { APP_STORE_URL } from '../consts';
 </section>
 
 <style>
+	/* Phones and small tablets: the image runs edge to edge and the copy
+	   stacks below it. */
 	.hero {
 		max-width: 90rem;
-		padding-block: var(--gutter) clamp(3rem, 8vw, 5rem);
+		margin-inline: auto;
+		padding-bottom: clamp(3rem, 8vw, 5rem);
 	}
 
 	.frame {
@@ -46,7 +49,6 @@ import { APP_STORE_URL } from '../consts';
 		display: block;
 		width: 100%;
 		height: auto;
-		border-radius: clamp(0.75rem, 2vw, 1.5rem);
 	}
 
 	/* Apple's official badge, unmodified. Min 40px tall on screen, with clear
@@ -68,12 +70,11 @@ import { APP_STORE_URL } from '../consts';
 		outline-offset: 3px;
 	}
 
-	/* Below the image on narrow screens. */
 	.copy {
 		display: grid;
 		gap: 1rem;
 		justify-items: start;
-		padding-top: 2rem;
+		padding: 2rem var(--gutter) 0;
 	}
 
 	.eyebrow {
@@ -93,9 +94,19 @@ import { APP_STORE_URL } from '../consts';
 		max-width: 40ch;
 	}
 
-	/* Over the night sky on the right of the image on wide screens. The image
-	   is dark in both themes, so the text keeps fixed light colors. */
-	@container hero (width >= 50rem) {
+	/* Wide screens: the image gets a gutter and rounded corners, and the copy
+	   sits over the night sky on its right. The image is dark in both themes,
+	   so the text keeps fixed light colors. */
+	@media (width >= 54rem) {
+		.hero {
+			padding-top: var(--gutter);
+			padding-inline: var(--gutter);
+		}
+
+		.frame picture :global(img) {
+			border-radius: clamp(0.75rem, 2vw, 1.5rem);
+		}
+
 		.copy {
 			position: absolute;
 			top: 27%;

@@ -12,7 +12,7 @@ import { APP_STORE_URL } from '../consts';
 			alt="Clay diorama of a skeleton in a captain's hat, pipe in its teeth, steering a ship's wheel on a wooden surfboard through a curling wave under a full moon."
 			formats={['avif', 'webp']}
 			widths={[640, 960, 1280, 1600, 2000]}
-			sizes="(min-width: 90rem) 86rem, (min-width: 54rem) calc(100vw - 4rem), 127vw"
+			sizes="(min-width: 90rem) 86rem, (min-width: 54rem) calc(100vw - 4rem), 122vw"
 			loading="eager"
 			fetchpriority="high"
 		/>
@@ -46,13 +46,13 @@ import { APP_STORE_URL } from '../consts';
 	}
 
 	/* The right of the image is empty sky meant for the desktop copy, so on
-	   narrow screens crop ~21% of it off (about 100px on a phone) for a
+	   narrow screens crop ~18% of it off (about 80px on a phone) for a
 	   squarer frame and a bigger skeleton. */
 	.frame picture :global(img) {
 		display: block;
 		width: 100%;
 		height: auto;
-		aspect-ratio: 1580 / 1116;
+		aspect-ratio: 1648 / 1116;
 		object-fit: cover;
 		object-position: left center;
 	}

@@ -32,8 +32,8 @@ import { APP_STORE_URL } from '../consts';
 </section>
 
 <style>
-	/* Phones and small tablets: the image runs edge to edge and the copy
-	   stacks below it. */
+	/* Phones and small tablets: the image runs edge to edge with the skelly
+	   label in its corner, and the rest of the copy stacks below it. */
 	.hero {
 		max-width: 90rem;
 		margin-inline: auto;
@@ -83,10 +83,16 @@ import { APP_STORE_URL } from '../consts';
 		padding: 2rem var(--gutter) 0;
 	}
 
+	/* On narrow screens the label sits in the image's top-left corner, lined
+	   up with the copy below, to save vertical space. */
 	.eyebrow {
+		position: absolute;
+		top: var(--gutter);
+		left: var(--gutter);
 		font-family: var(--font-mono);
 		font-size: 0.875rem;
-		color: var(--muted);
+		color: #f4f1ea;
+		text-shadow: 1px 2px 2px #000000d4;
 	}
 
 	h1 {
@@ -141,6 +147,7 @@ import { APP_STORE_URL } from '../consts';
 		}
 
 		.eyebrow {
+			position: static;
 			font-size: max(0.8rem, 1.1cqi);
 			color: #cfd3ea;
 		}

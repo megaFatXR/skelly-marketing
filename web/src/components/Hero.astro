@@ -1,23 +1,57 @@
 ---
+import { Picture } from 'astro:assets';
+import heroImage from '../assets/hero.jpg';
 import { APP_STORE_URL } from '../consts';
 ---
 
 <section class="hero container">
-	<p class="eyebrow">skelly</p>
-	<h1>The web, down to the bones.</h1>
-	<p class="lede">
-		A bare-bones browser that puts JavaScript on a switch. Turn it off and
-		pages get lighter, quieter, and out of your way.
-	</p>
-	<a class="button" href={APP_STORE_URL}>Download on the App Store</a>
+	<div class="frame">
+		<Picture
+			src={heroImage}
+			alt="Clay diorama of a skeleton in a captain's hat, pipe in its teeth, steering a ship's wheel on a wooden surfboard through a curling wave under a full moon."
+			formats={['avif', 'webp']}
+			widths={[640, 960, 1280, 1600, 2000]}
+			sizes="(min-width: 90rem) 86rem, calc(100vw - 2rem)"
+			loading="eager"
+			fetchpriority="high"
+		/>
+		<div class="copy">
+			<p class="eyebrow">skelly</p>
+			<h1>Surf the web in bare bones</h1>
+			<p class="lede">
+				Skelly strips websites down to the bare bones. Switch off JavaScript
+				and most ads, trackers, and pop-ups go with it, leaving fast, quiet
+				pages that get out of your way.
+			</p>
+			<a class="button" href={APP_STORE_URL}>Download on the App Store</a>
+		</div>
+	</div>
 </section>
 
 <style>
 	.hero {
+		max-width: 90rem;
+		padding-block: var(--gutter) clamp(3rem, 8vw, 5rem);
+	}
+
+	.frame {
+		container: hero / inline-size;
+		position: relative;
+	}
+
+	.frame :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: clamp(0.75rem, 2vw, 1.5rem);
+	}
+
+	/* Below the image on narrow screens. */
+	.copy {
 		display: grid;
-		gap: 1.25rem;
+		gap: 1rem;
 		justify-items: start;
-		padding-block: clamp(4rem, 14vw, 9rem) clamp(3rem, 8vw, 5rem);
+		padding-top: 2rem;
 	}
 
 	.eyebrow {
@@ -27,13 +61,66 @@ import { APP_STORE_URL } from '../consts';
 	}
 
 	h1 {
-		font-size: clamp(2.5rem, 8vw, 5rem);
-		max-width: 14ch;
+		font-size: clamp(2.25rem, 9vw, 3.5rem);
+		max-width: 12ch;
 	}
 
 	.lede {
-		font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+		font-size: 1.125rem;
 		color: var(--muted);
-		max-width: 38ch;
+		max-width: 40ch;
+	}
+
+	/* Over the night sky on the right of the image on wide screens. The image
+	   is dark in both themes, so the text keeps fixed light colors. */
+	@container hero (width >= 50rem) {
+		.copy {
+			position: absolute;
+			top: 27%;
+			left: 55%;
+			right: 5%;
+			isolation: isolate;
+			gap: 1.2cqi;
+			padding: 0;
+			color: #f4f1ea;
+			text-shadow: 0 1px 12px rgb(10 12 40 / 0.6);
+		}
+
+		/* Soft night-sky glow behind the text to calm the spray and whitewater. */
+		.copy::before {
+			content: '';
+			position: absolute;
+			inset: -18% -12% -22% -14%;
+			z-index: -1;
+			background: radial-gradient(
+				closest-side,
+				rgb(12 16 46 / 0.72),
+				rgb(12 16 46 / 0.45) 65%,
+				transparent
+			);
+		}
+
+		.eyebrow {
+			font-size: max(0.8rem, 1.1cqi);
+			color: #cfd3ea;
+		}
+
+		h1 {
+			font-size: 4.2cqi;
+			max-width: none;
+		}
+
+		.lede {
+			font-size: max(1rem, 1.3cqi);
+			color: #dde0f0;
+			max-width: 34ch;
+		}
+
+		.button {
+			margin-top: 0.6cqi;
+			background: #f4f1ea;
+			color: #111110;
+			text-shadow: none;
+		}
 	}
 </style>

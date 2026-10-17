@@ -67,20 +67,3 @@ a {
 	margin-inline: auto;
 	padding-inline: var(--gutter);
 }
-
-.button {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	padding: 0.8rem 1.4rem;
-	border-radius: 999px;
-	background: var(--accent);
-	color: var(--accent-text);
-	font-weight: 600;
-	text-decoration: none;
-}
-
-.button:focus-visible {
-	outline: 2px solid var(--text);
-	outline-offset: 3px;
-}

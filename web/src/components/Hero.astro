@@ -1,5 +1,6 @@
 ---
-import { Picture } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
+import appStoreBadge from '../assets/app-store-badge.svg';
 import heroImage from '../assets/hero.jpg';
 import { APP_STORE_URL } from '../consts';
 ---
@@ -23,7 +24,9 @@ import { APP_STORE_URL } from '../consts';
 				JavaScript and most ads, trackers, and pop-ups go with it, leaving
 				fast, quiet pages that get out of your way.
 			</p>
-			<a class="button" href={APP_STORE_URL}>Download on the App Store</a>
+			<a class="badge" href={APP_STORE_URL}>
+				<Image src={appStoreBadge} alt="Download on the App Store" loading="eager" />
+			</a>
 		</div>
 	</div>
 </section>
@@ -39,11 +42,30 @@ import { APP_STORE_URL } from '../consts';
 		position: relative;
 	}
 
-	.frame :global(img) {
+	.frame picture :global(img) {
 		display: block;
 		width: 100%;
 		height: auto;
 		border-radius: clamp(0.75rem, 2vw, 1.5rem);
+	}
+
+	/* Apple's official badge, unmodified. Min 40px tall on screen, with clear
+	   space of a quarter of its height around it. */
+	.badge {
+		display: block;
+		margin-top: 0.75rem;
+		border-radius: 0.6rem;
+	}
+
+	.badge :global(img) {
+		display: block;
+		height: 3rem;
+		width: auto;
+	}
+
+	.badge:focus-visible {
+		outline: 2px solid var(--text);
+		outline-offset: 3px;
 	}
 
 	/* Below the image on narrow screens. */
@@ -116,11 +138,16 @@ import { APP_STORE_URL } from '../consts';
 			max-width: 34ch;
 		}
 
-		.button {
-			margin-top: 0.6cqi;
-			background: #f4f1ea;
-			color: #111110;
-			text-shadow: none;
+		.badge {
+			margin-top: 0.8cqi;
+		}
+
+		.badge :global(img) {
+			height: max(2.5rem, 3.6cqi);
+		}
+
+		.badge:focus-visible {
+			outline-color: #f4f1ea;
 		}
 	}
 </style>

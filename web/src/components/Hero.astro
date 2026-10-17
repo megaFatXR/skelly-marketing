@@ -32,10 +32,8 @@ import { APP_STORE_URL } from '../consts';
 </section>
 
 <style>
-	/* Phones and small tablets: the image runs edge to edge with the title over
-	   its night sky, and the rest of the copy stacks below. .copy steps aside
-	   (display: contents) so its children share the frame's grid with the
-	   image. */
+	/* Phones and small tablets: the image runs edge to edge and the copy
+	   stacks below it. */
 	.hero {
 		max-width: 90rem;
 		margin-inline: auto;
@@ -43,22 +41,8 @@ import { APP_STORE_URL } from '../consts';
 	}
 
 	.frame {
-		--night-glow: radial-gradient(
-			closest-side,
-			rgb(12 16 46 / 0.72),
-			rgb(12 16 46 / 0.45) 65%,
-			transparent
-		);
-
 		container: hero / inline-size;
 		position: relative;
-		display: grid;
-		row-gap: 1rem;
-		overflow-x: clip;
-	}
-
-	.frame picture {
-		grid-area: 1 / 1;
 	}
 
 	.frame picture :global(img) {
@@ -87,41 +71,21 @@ import { APP_STORE_URL } from '../consts';
 	}
 
 	.copy {
-		display: contents;
-	}
-
-	.eyebrow,
-	.lede,
-	.badge {
-		justify-self: start;
-		margin-inline: var(--gutter);
+		display: grid;
+		gap: 1rem;
+		justify-items: start;
+		padding: 2rem var(--gutter) 0;
 	}
 
 	.eyebrow {
-		margin-top: 1rem;
 		font-family: var(--font-mono);
 		font-size: 0.875rem;
 		color: var(--muted);
 	}
 
 	h1 {
-		grid-area: 1 / 1;
-		align-self: start;
-		position: relative;
-		isolation: isolate;
-		margin: 14cqi 4cqi 0 48cqi;
-		font-size: 6.6cqi;
-		color: #f4f1ea;
-		text-shadow: 1px 2px 2px #000000d4;
-	}
-
-	/* Soft night-sky glow behind the text to calm the spray and whitewater. */
-	h1::before {
-		content: '';
-		position: absolute;
-		inset: -35% -14%;
-		z-index: -1;
-		background: var(--night-glow);
+		font-size: clamp(2.25rem, 9vw, 3.5rem);
+		max-width: 12ch;
 	}
 
 	.lede {
@@ -139,56 +103,44 @@ import { APP_STORE_URL } from '../consts';
 			padding-inline: var(--gutter);
 		}
 
-		.frame {
-			display: block;
-		}
-
 		.frame picture :global(img) {
 			border-radius: clamp(0.75rem, 2vw, 1.5rem);
 		}
 
 		.copy {
-			display: grid;
-			justify-items: start;
 			position: absolute;
 			top: 27%;
 			left: 55%;
 			right: 5%;
 			isolation: isolate;
 			gap: 1.2cqi;
+			padding: 0;
 			color: #f4f1ea;
 			text-shadow: 1px 2px 2px #000000d4;
 		}
 
-		/* The glow moves from the title to the whole copy block. */
-		h1::before {
-			content: none;
-		}
-
+		/* Soft night-sky glow behind the text to calm the spray and whitewater. */
 		.copy::before {
 			content: '';
 			position: absolute;
 			inset: -18% -12% -22% -14%;
 			z-index: -1;
-			background: var(--night-glow);
-		}
-
-		.eyebrow,
-		.lede,
-		.badge {
-			margin-inline: 0;
+			background: radial-gradient(
+				closest-side,
+				rgb(12 16 46 / 0.72),
+				rgb(12 16 46 / 0.45) 65%,
+				transparent
+			);
 		}
 
 		.eyebrow {
-			margin-top: 0;
 			font-size: max(0.8rem, 1.1cqi);
 			color: #cfd3ea;
 		}
 
 		h1 {
-			grid-area: auto;
-			margin: 0;
 			font-size: 4.2cqi;
+			max-width: none;
 		}
 
 		.lede {

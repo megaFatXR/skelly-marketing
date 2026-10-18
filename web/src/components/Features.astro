@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import skellyWink from '../assets/skelly-wink.webp';
+
 const features = [
 	{
 		title: 'No ads',
@@ -40,17 +43,21 @@ const features = [
 	<ul>
 		{
 			features.map(({ title, body }) => (
-				<li>
+				<li class="card">
 					<h3>{title}</h3>
 					<p>{body}</p>
 				</li>
 			))
 		}
+		<li class="mascot" aria-hidden="true">
+			<Image src={skellyWink} alt="" widths={[160, 320, 480]} sizes="10rem" />
+		</li>
 	</ul>
 </section>
 
 <style>
 	.features {
+		container: features / inline-size;
 		padding-block: clamp(3rem, 8vw, 5rem);
 		border-top: 1px solid var(--line);
 	}
@@ -69,7 +76,7 @@ const features = [
 		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 	}
 
-	li {
+	.card {
 		display: grid;
 		gap: 0.5rem;
 		padding: 1.5rem;
@@ -83,5 +90,37 @@ const features = [
 
 	p {
 		color: var(--muted);
+	}
+
+	/* On one or two columns the winking skelly closes the list on its own row. */
+	.mascot {
+		grid-column: 1 / -1;
+		justify-self: center;
+		width: 10rem;
+		margin-top: 1rem;
+	}
+
+	.mascot :global(img) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	/* On three columns (3 × 16rem + gaps) it fills the empty last cell, sized
+	   to the row so it never makes the cards taller. */
+	@container features (width >= 50rem) {
+		.mascot {
+			grid-column: auto;
+			justify-self: stretch;
+			position: relative;
+			width: auto;
+			margin-top: 0;
+		}
+
+		.mascot :global(img) {
+			position: absolute;
+			inset: 0;
+		}
 	}
 </style>

@@ -1,9 +1,11 @@
 ---
+import { withBase } from '../lib/url';
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="container">
-	<p>© {year} Skelly</p>
+	<p>© {year} Skelly · <a href={withBase('privacy/')}>Privacy Policy</a></p>
 	<p class="note">This page ships zero JavaScript.</p>
 </footer>
 
@@ -17,6 +19,14 @@ const year = new Date().getFullYear();
 		border-top: 1px solid var(--line);
 		color: var(--muted);
 		font-size: 0.875rem;
+	}
+
+	a {
+		text-underline-offset: 0.2em;
+	}
+
+	a:hover {
+		color: var(--text);
 	}
 
 	.note {

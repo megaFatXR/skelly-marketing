@@ -1,0 +1,205 @@
+---
+import Footer from '../components/Footer.astro';
+import { CONTACT_EMAIL } from '../consts';
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/url';
+
+const effective = 'October 18, 2026';
+---
+
+<Base
+	title="Privacy Policy — Skelly"
+	description="Skelly collects no data about you. Here's what stays on your phone and who the app connects to."
+>
+	<header class="container top">
+		<a class="home" href={withBase('')}>skelly</a>
+	</header>
+
+	<main class="container policy">
+		<h1>Privacy Policy</h1>
+		<p class="effective">Effective {effective}</p>
+
+		<p class="intro">
+			Skelly is a browser built to keep the web out of your business, and that
+			starts with us. <strong>Skelly doesn't collect any data about you.</strong> No
+			accounts, no analytics, no ads, no tracking, and no servers of ours that your
+			browsing passes through.
+		</p>
+		<p>This policy covers the Skelly apps for iPhone and Android, and this website.</p>
+
+		<h2>What we collect</h2>
+		<p>
+			Nothing. We don't collect, store, sell, or share personal information, usage
+			data, or diagnostics. The app contains no analytics, advertising, or
+			crash-reporting code, ours or anyone else's, so there's nothing to opt out of.
+		</p>
+
+		<h2>What stays on your phone</h2>
+		<p>To do its job, Skelly keeps a few things on your device, and only there:</p>
+		<ul>
+			<li>Your home screen sites, Bare Bones and script settings, appearance, and Reader text style.</li>
+			<li>
+				The articles you've read in the last 30 days, while History is on. History is
+				left out of device backups, and turning it off in Settings deletes it.
+			</li>
+			<li>Articles you save for offline reading, until you swipe them away.</li>
+			<li>
+				Site icons, headline pictures, and the latest headlines, kept as a cache that
+				Skelly refreshes or clears on its own.
+			</li>
+			<li>Cookies and other data that websites store in the browser, as in any browser.</li>
+		</ul>
+		<p>
+			We never see any of it, and deleting Skelly removes all of it. If you back up
+			your phone with iCloud or Google, those backups may include Skelly's settings
+			and saved articles, under Apple's or Google's terms. Your history is never
+			included.
+		</p>
+
+		<h2>Who Skelly connects to</h2>
+		<p>Skelly talks directly to the websites you use, never through a server of ours.</p>
+		<ul>
+			<li>
+				<strong>Websites you visit.</strong> Like any browser, Skelly loads pages from
+				the sites you open, and those sites receive what browsers normally send, such
+				as your IP address. Their own privacy policies apply. With Bare Bones on,
+				their scripts don't run, which stops most of their trackers.
+			</li>
+			<li>
+				<strong>Latest headlines.</strong> Skelly fetches your sites' news feeds and
+				their pictures straight from those sites, without sending cookies.
+			</li>
+			<li>
+				<strong>Home screen icons and names.</strong> These come from each site
+				itself, without cookies, rather than from an icon service that would learn
+				which sites you read.
+			</li>
+			<li>
+				<strong>Search.</strong> Anything you type in the address bar that isn't a web
+				address goes to DuckDuckGo, or to Google once you turn Bare Bones off for
+				google.com. Their privacy policies apply to your searches.
+			</li>
+		</ul>
+
+		<h2>Read aloud</h2>
+		<p>
+			Read aloud uses your phone's built-in speech voices, which run on the device.
+			The article's text isn't sent anywhere to be read.
+		</p>
+
+		<h2>Suggested sites</h2>
+		<p>
+			Suggestions are based on the region set on your phone, under Language &amp;
+			Region. Skelly never asks for your location.
+		</p>
+
+		<h2>Crash reports from Apple and Google</h2>
+		<p>
+			If you've chosen to share diagnostics with app developers in your phone's
+			settings, Apple or Google may pass us crash reports and performance
+			statistics. They're anonymized before we see them, and you can turn sharing off
+			at any time in your phone's privacy settings.
+		</p>
+
+		<h2>Children</h2>
+		<p>
+			Skelly is meant for a general audience. Since it collects no data from anyone,
+			it collects none from children either.
+		</p>
+
+		<h2>This website</h2>
+		<p>
+			This site uses no cookies, analytics, or JavaScript. It's hosted on GitHub
+			Pages, which may log visitors' IP addresses for security, as described in <a
+				href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+				>GitHub's privacy statement</a
+			>.
+		</p>
+
+		<h2>Changes to this policy</h2>
+		<p>
+			If anything changes, we'll update this page and the date at the top. If Skelly
+			ever needed to collect data, which we don't plan to, we'd say so here before
+			the change reached the app.
+		</p>
+
+		<h2>Contact</h2>
+		<p>
+			Questions about privacy? Email us at {
+				CONTACT_EMAIL ? (
+					<a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+				) : (
+					<mark>[contact email]</mark>
+				)
+			}.
+		</p>
+	</main>
+
+	<Footer />
+</Base>
+
+<style>
+	.top,
+	.policy {
+		max-width: 44rem;
+	}
+
+	.top {
+		padding-block: 1.5rem;
+	}
+
+	.home {
+		font-family: var(--font-mono);
+		font-size: 1.125rem;
+		text-decoration: none;
+	}
+
+	.policy {
+		padding-block: clamp(1.5rem, 6vw, 3rem) clamp(3rem, 8vw, 5rem);
+	}
+
+	h1 {
+		font-size: clamp(2.25rem, 7vw, 3rem);
+	}
+
+	.effective {
+		margin-top: 0.5rem;
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		color: var(--muted);
+	}
+
+	.intro {
+		margin-top: 2rem;
+		font-size: 1.125rem;
+	}
+
+	h2 {
+		margin-top: 2.5rem;
+		font-size: 1.375rem;
+	}
+
+	p,
+	ul {
+		margin-top: 1rem;
+	}
+
+	p:not(.intro),
+	li {
+		color: var(--muted);
+	}
+
+	strong {
+		color: var(--text);
+	}
+
+	ul {
+		display: grid;
+		gap: 0.75rem;
+		padding-left: 1.25rem;
+	}
+
+	.policy a {
+		text-underline-offset: 0.2em;
+	}
+</style>

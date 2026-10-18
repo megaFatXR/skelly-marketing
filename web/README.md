@@ -12,6 +12,7 @@ Run from `web/`:
 | `npm run dev`     | Dev server at `localhost:4321`          |
 | `npm run build`   | Build the static site to `./dist/`      |
 | `npm run preview` | Serve the build locally                 |
+| `npm run favicons` | Rebuild favicons from `src/assets/icon.png` |
 
 ## Structure
 

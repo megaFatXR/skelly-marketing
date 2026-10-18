@@ -5,5 +5,5 @@ export const SITE_DESCRIPTION =
 // TODO: replace with the real App Store listing once it exists.
 export const APP_STORE_URL = '#download';
 
-// TODO: set before publishing; the privacy policy shows a placeholder while empty.
-export const CONTACT_EMAIL = '';
+// The privacy policy shows a placeholder while this is empty.
+export const CONTACT_EMAIL = 'hello@skelly.surf';

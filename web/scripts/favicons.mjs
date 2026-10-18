@@ -11,7 +11,31 @@ const out = (name) => fileURLToPath(new URL(`../public/${name}`, import.meta.url
 // dark background instead.
 const APPLE_BACKGROUND = '#111110';
 
-const resized = (size) => sharp(src).resize(size, size);
+// The icon's gray disc is partly see-through, so it fades into dark tab bars
+// and only the skull shows. A solid disc of the same gray goes underneath.
+const DISC = { radius: 0.48, color: '#4b4a47' };
+
+// Zoom in on the skull, hat and pipe so they fill the tab like other sites'
+// icons do; the disc's edge is cropped off. Fractions of the source size.
+const CROP = { left: 0.1375, top: 0.07, size: 0.7875 };
+
+const { width: sourceSize } = await sharp(src).metadata();
+const disc = `<svg xmlns="http://www.w3.org/2000/svg" width="${sourceSize}" height="${sourceSize}">
+	<circle cx="50%" cy="50%" r="${DISC.radius * sourceSize}" fill="${DISC.color}"/>
+</svg>`;
+// sharp crops before compositing, so the layers are flattened first.
+const layered = await sharp(Buffer.from(disc)).composite([{ input: src }]).png().toBuffer();
+const artwork = await sharp(layered)
+	.extract({
+		left: Math.round(CROP.left * sourceSize),
+		top: Math.round(CROP.top * sourceSize),
+		width: Math.round(CROP.size * sourceSize),
+		height: Math.round(CROP.size * sourceSize),
+	})
+	.png()
+	.toBuffer();
+
+const resized = (size) => sharp(artwork).resize(size, size);
 
 // An ICO can hold PNGs directly, which every current browser reads.
 function ico(images) {

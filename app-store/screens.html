@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skelly App Store Screens</title>
+<style>
+	/* Each .screen is laid out at 440 × 956 CSS px and exported at 3×, which is
+	   1320 × 2868: the 6.9" iPhone size. App Store Connect scales it down for
+	   every smaller iPhone. */
+	:root {
+		--bg: #111110;
+		--text: #f4f1ea;
+		--muted: #a39e93;
+		/* The line under each headline: a touch softer than the headline, and
+		   its <strong> words as bright. */
+		--sub: #dcd7cd;
+		/* The app's coral (Brand.swift), and its brick shade for light backgrounds. */
+		--coral: #ff6757;
+		--brick: #9e4036;
+		/* Night sky from the hero art, glowing down from the top of each screen. */
+		--glow: rgb(12 16 46 / 0.95);
+
+		--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+		--font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+		/* Simulator captures are 1206 × 2622 (iPhone 17 Pro). */
+		--capture-ratio: calc(2622 / 1206);
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+		margin: 0;
+	}
+
+	body {
+		background: #0a0a09;
+		color: var(--muted);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		padding: 40px 24px 64px;
+	}
+
+	/* Preview page chrome, not part of any export */
+
+	.page-header {
+		text-align: center;
+		font-size: 13px;
+		margin-bottom: 32px;
+	}
+
+	.page-header h1 {
+		font-size: 13px;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: #6d6a63;
+		margin-bottom: 8px;
+	}
+
+	.langs {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 6px;
+		margin-top: 12px;
+		font-family: var(--font-mono);
+	}
+
+	.langs a {
+		color: #8a867d;
+		text-decoration: none;
+		padding: 2px 8px;
+		border-radius: 6px;
+	}
+
+	.langs a[aria-current] {
+		background: #26241f;
+		color: var(--text);
+	}
+
+	.screens {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 32px 24px;
+	}
+
+	figure {
+		display: grid;
+		gap: 10px;
+		justify-items: center;
+	}
+
+	figcaption {
+		font-family: var(--font-mono);
+		font-size: 12px;
+		color: #55524c;
+	}
+
+	/* The screens */
+
+	.screen {
+		position: relative;
+		width: 440px;
+		height: 956px;
+		overflow: hidden;
+		background: radial-gradient(130% 55% at 50% 0%, var(--glow), transparent 75%), var(--bg);
+		color: var(--text);
+		text-align: center;
+	}
+
+	.copy {
+		position: absolute;
+		inset: 0 0 auto;
+		padding: 64px 30px 0;
+	}
+
+	.tag {
+		font-family: var(--font-mono);
+		font-size: 18px;
+		color: var(--coral);
+		margin-bottom: 14px;
+	}
+
+	/* Lines only break at a <br>; fitText() shrinks any that run too wide. */
+	.headline,
+	.sub {
+		white-space: nowrap;
+	}
+
+	.headline {
+		font-size: 44px;
+		font-weight: 800;
+		line-height: 1.04;
+		letter-spacing: -0.025em;
+	}
+
+	.sub {
+		font-size: 17px;
+		line-height: 1.45;
+		color: var(--sub);
+		margin-top: 16px;
+	}
+
+	.sub strong {
+		font-weight: 700;
+		color: var(--text);
+	}
+
+	/* Phone frame around a simulator capture. The capture already has the
+	   Dynamic Island, so the frame is only the bezel. */
+	.phone {
+		--phone-w: 290px;
+		position: absolute;
+		left: 50%;
+		bottom: 36px;
+		width: var(--phone-w);
+		padding: 9px;
+		border-radius: 52px;
+		background: #1f1e1c;
+		box-shadow:
+			0 0 0 1px #3a3833,
+			inset 0 0 0 1px rgb(255 255 255 / 0.06),
+			0 30px 80px rgb(0 0 0 / 0.65);
+		transform: translateX(-50%);
+	}
+
+	/* A bigger phone that runs off the bottom edge, for captures whose
+	   interesting part is at the top. */
+	.phone.bleed {
+		--phone-w: 340px;
+		top: 300px;
+		bottom: auto;
+	}
+
+	.phone-screen {
+		--img-w: calc(var(--phone-w) - 18px);
+		position: relative;
+	}
+
+	.phone-screen > img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 1206 / 2622;
+		border-radius: 43px;
+	}
+
+	/* Magnifies part of the capture in place: --x, --y, --w and --h are the
+	   region as fractions of the capture, --zoom how much bigger it gets. */
+	.callout {
+		--cw: calc(var(--w) * var(--img-w) * var(--zoom));
+		--ch: calc(var(--h) * var(--img-w) * var(--capture-ratio) * var(--zoom));
+		position: absolute;
+		left: calc((var(--x) + var(--w) / 2) * var(--img-w) - var(--cw) / 2);
+		top: calc((var(--y) + var(--h) / 2) * var(--img-w) * var(--capture-ratio) - var(--ch) / 2);
+		width: var(--cw);
+		height: var(--ch);
+		border-radius: calc(var(--ch) * var(--round, 0.5));
+		background-size: calc(var(--img-w) * var(--zoom)) auto;
+		background-position:
+			calc(var(--x) * var(--img-w) * var(--zoom) * -1)
+			calc(var(--y) * var(--img-w) * var(--capture-ratio) * var(--zoom) * -1);
+		box-shadow:
+			0 0 0 2px var(--text),
+			0 20px 44px rgb(0 0 0 / 0.7);
+	}
+
+	/* 01 — Hero: the landing page's clay diorama over the headline. The
+	   background starts in the art's night blue so the fade below it is soft. */
+
+	.hero {
+		background: linear-gradient(to bottom, #0c1030, #101018 70%, var(--bg));
+	}
+
+	.hero .art {
+		position: absolute;
+		inset: 0 0 auto;
+		width: 100%;
+		height: 568px;
+		object-fit: cover;
+		object-position: 19.2% 0;
+		mask-image: linear-gradient(to bottom, #000 50%, transparent);
+	}
+
+	.hero .copy {
+		inset: auto 0 0;
+		padding: 0 30px 92px;
+	}
+
+	.hero .tag {
+		font-size: 24px;
+		color: #cfd3ea;
+	}
+
+	.hero .headline {
+		font-size: 50px;
+	}
+
+	/* 06 — Privacy: a light screen to close the set, with the winking skelly */
+
+	.privacy {
+		--text: #161513;
+		--sub: #3d3a35;
+		background: radial-gradient(120% 60% at 50% 100%, #e6dfd0, transparent 70%), #f4f1ea;
+	}
+
+	.privacy .tag {
+		color: var(--brick);
+	}
+
+	.privacy .mascot {
+		position: absolute;
+		left: 50%;
+		bottom: 140px;
+		width: 380px;
+		transform: translateX(-50%);
+	}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+	<h1>Skelly — App Store screens</h1>
+	<p>440 × 956 each, exported at 3× to 1320 × 2868 (6.9" iPhone) by <code>npm run export</code></p>
+	<nav class="langs" aria-label="Language"></nav>
+</header>
+
+<main class="screens">
+
+	<figure>
+		<section class="screen hero" data-screen="hero" data-name="01-hero">
+			<img class="art" src="../web/src/assets/hero.jpg" alt="">
+			<div class="copy">
+				<p class="tag" data-copy="tag"></p>
+				<h2 class="headline" data-copy="headline"></h2>
+				<p class="sub" data-copy="sub"></p>
+			</div>
+		</section>
+		<figcaption>01-hero</figcaption>
+	</figure>
+
+	<figure>
+		<section class="screen" data-screen="bareBones" data-name="02-bare-bones">
+			<div class="copy">
+				<p class="tag" data-copy="tag"></p>
+				<h2 class="headline" data-copy="headline"></h2>
+				<p class="sub" data-copy="sub"></p>
+			</div>
+			<!-- a little smaller, to leave room for the four-line sub -->
+			<div class="phone" style="--phone-w: 270px">
+				<div class="phone-screen">
+					<img data-capture="page.png" alt="">
+					<!-- the Bare Bones On button -->
+					<div class="callout" data-capture="page.png" style="--x: 0.296; --y: 0.9256; --w: 0.408; --h: 0.0408; --zoom: 1.5"></div>
+				</div>
+			</div>
+		</section>
+		<figcaption>02-bare-bones</figcaption>
+	</figure>
+
+	<figure>
+		<section class="screen" data-screen="home" data-name="03-home">
+			<div class="copy">
+				<p class="tag" data-copy="tag"></p>
+				<h2 class="headline" data-copy="headline"></h2>
+				<p class="sub" data-copy="sub"></p>
+			</div>
+			<div class="phone bleed">
+				<div class="phone-screen">
+					<img data-capture="home.png" alt="">
+				</div>
+			</div>
+		</section>
+		<figcaption>03-home</figcaption>
+	</figure>
+
+	<figure>
+		<section class="screen" data-screen="reader" data-name="04-reader">
+			<div class="copy">
+				<p class="tag" data-copy="tag"></p>
+				<h2 class="headline" data-copy="headline"></h2>
+				<p class="sub" data-copy="sub"></p>
+			</div>
+			<div class="phone bleed">
+				<div class="phone-screen">
+					<img data-capture="reader.png" alt="">
+				</div>
+			</div>
+		</section>
+		<figcaption>04-reader</figcaption>
+	</figure>
+
+	<figure>
+		<section class="screen" data-screen="listen" data-name="05-listen">
+			<div class="copy">
+				<p class="tag" data-copy="tag"></p>
+				<h2 class="headline" data-copy="headline"></h2>
+				<p class="sub" data-copy="sub"></p>
+			</div>
+			<div class="phone">
+				<div class="phone-screen">
+					<img data-capture="listen.png" alt="">
+					<!-- the read aloud player -->
+					<div class="callout" data-capture="listen.png" style="--x: 0; --y: 0.8063; --w: 1; --h: 0.0595; --zoom: 1.12; --round: 0.22"></div>
+				</div>
+			</div>
+		</section>
+		<figcaption>05-listen</figcaption>
+	</figure>
+
+	<figure>
+		<section class="screen privacy" data-screen="privacy" data-name="06-privacy">
+			<div class="copy">
+				<p class="tag" data-copy="tag"></p>
+				<h2 class="headline" data-copy="headline"></h2>
+				<p class="sub" data-copy="sub"></p>
+			</div>
+			<img class="mascot" src="../web/src/assets/skelly-wink.png" alt="">
+		</section>
+		<figcaption>06-privacy</figcaption>
+	</figure>
+
+</main>
+
+<script src="copy.js"></script>
+<script>
+	const requested = new URLSearchParams(location.search).get('lang');
+	const lang = requested in COPY ? requested : 'en';
+	document.documentElement.lang = lang;
+
+	const nav = document.querySelector('.langs');
+	for (const code of Object.keys(COPY)) {
+		const link = document.createElement('a');
+		link.href = `?lang=${code}`;
+		link.textContent = code;
+		if (code === lang) link.setAttribute('aria-current', 'page');
+		nav.append(link);
+	}
+
+	// What export.mjs reports back: copy and captures that fell back to
+	// English, and captures that are missing altogether.
+	const report = { lang, missingCopy: [], englishCaptures: [], brokenCaptures: [] };
+
+	for (const screen of document.querySelectorAll('.screen')) {
+		const key = screen.dataset.screen;
+		for (const el of screen.querySelectorAll('[data-copy]')) {
+			const field = el.dataset.copy;
+			const text = COPY[lang][key]?.[field];
+			if (text == null) report.missingCopy.push(`${key}.${field}`);
+			el.innerHTML = text ?? COPY.en[key][field];
+		}
+	}
+
+	// Shrink any line that runs wider than its column (long translations)
+	// until it fits.
+	function fitText() {
+		for (const el of document.querySelectorAll('.headline, .sub')) {
+			let size = parseFloat(getComputedStyle(el).fontSize);
+			while (el.scrollWidth > el.clientWidth && size > 12) {
+				el.style.fontSize = `${--size}px`;
+			}
+		}
+	}
+
+	const loads = (src) =>
+		new Promise((resolve) => {
+			const img = new Image();
+			img.onload = () => resolve(true);
+			img.onerror = () => resolve(false);
+			img.src = src;
+		});
+
+	// Captures come from captures/<lang>/, or the English one if that
+	// language has none yet.
+	async function loadCaptures() {
+		const files = new Set([...document.querySelectorAll('[data-capture]')].map((el) => el.dataset.capture));
+		const sources = {};
+		for (const file of files) {
+			const own = `captures/${lang}/${file}`;
+			const english = `captures/en/${file}`;
+			if (await loads(own)) sources[file] = own;
+			else if (lang !== 'en' && (await loads(english))) {
+				sources[file] = english;
+				report.englishCaptures.push(file);
+			} else report.brokenCaptures.push(file);
+		}
+		for (const el of document.querySelectorAll('[data-capture]')) {
+			const src = sources[el.dataset.capture];
+			if (!src) continue;
+			if (el.tagName === 'IMG') el.src = src;
+			else el.style.backgroundImage = `url("${src}")`;
+		}
+		await Promise.all([...document.images].map((img) => img.decode().catch(() => {})));
+	}
+
+	window.screensReady = (async () => {
+		await document.fonts.ready;
+		fitText();
+		await loadCaptures();
+		return report;
+	})();
+</script>
+</body>
+</html>

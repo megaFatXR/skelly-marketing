@@ -1,0 +1,3 @@
+node_modules/
+# the Skelly build that npm run sim installs
+.build/

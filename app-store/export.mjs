@@ -1,34 +1,48 @@
-// Renders every screen in screens.html, in every language in copy.js, to
-// export/<lang>/<name>.png at 1320 × 2868, the 6.9" iPhone size that App Store
-// Connect scales down for every smaller iPhone.
+// Renders every screen in screens.html, in every language in copy.js, at the
+// two iPhone sizes App Store Connect takes:
+//
+//   export/<lang>/iphone-medium/  1206 × 2622, the 6.1"/6.3" size it requires
+//   export/<lang>/iphone-large/   1320 × 2868, the optional 6.9" size
+//
+// and header.html to export/en/header.png, the 21:9 product page header at
+// 3840 × 1646. Every language uses the English header, so only English
+// renders it. App Store Connect takes only PNG there, without an alpha
+// channel, and full compression keeps it well under the 10 MB a browser
+// upload allows (the default level makes it 13 MB).
 //
 //   npm run export           every language
 //   npm run export -- en fr  just these
 //
 // Uses the installed Google Chrome; set CHROME_PATH to use another.
-import { mkdir, readFile, rm } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import puppeteer from 'puppeteer-core';
+import sharp from 'sharp';
 
 const CHROME =
 	process.env.CHROME_PATH ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-// The screens are 440 × 956 CSS px, so 3× lands exactly on Apple's size.
+// The screens are 440 × 956 CSS px, so 3× lands exactly on the large size.
+// The medium size is the same render scaled down: its shape differs by under
+// a pixel, which `cover` trims off the edge.
 const SCALE = 3;
-const SIZE = { width: 1320, height: 2868 };
+const SIZES = {
+	'iphone-large': { width: 1320, height: 2868 },
+	'iphone-medium': { width: 1206, height: 2622 },
+};
 
-const screensUrl = (lang) => {
-	const url = pathToFileURL(fileURLToPath(new URL('screens.html', import.meta.url)));
+// The header is 1920 × 823 CSS px, so 2× lands exactly on Apple's size.
+const HEADER_SCALE = 2;
+const HEADER_SIZE = { width: 3840, height: 1646 };
+
+const pageUrl = (file, lang) => {
+	const url = pathToFileURL(fileURLToPath(new URL(file, import.meta.url)));
 	url.searchParams.set('lang', lang);
 	return url.href;
 };
-const outDir = (lang) => fileURLToPath(new URL(`export/${lang}/`, import.meta.url));
-
-// A PNG's width and height sit at bytes 16–23 of its header.
-async function pngSize(file) {
-	const header = (await readFile(file)).subarray(0, 24);
-	return { width: header.readUInt32BE(16), height: header.readUInt32BE(20) };
-}
+const screensUrl = (lang) => pageUrl('screens.html', lang);
+const outDir = (lang, size = '') =>
+	fileURLToPath(new URL(`export/${lang}/${size && `${size}/`}`, import.meta.url));
 
 const browser = await puppeteer.launch({ executablePath: CHROME });
 let failed = false;
@@ -36,6 +50,10 @@ let failed = false;
 try {
 	const page = await browser.newPage();
 	await page.setViewport({ width: 1600, height: 1200, deviceScaleFactor: SCALE });
+	const headerPage = await browser.newPage();
+	await headerPage.setViewport({ width: 2000, height: 1000, deviceScaleFactor: HEADER_SCALE });
+	// Element screenshots stall on a background tab, so each page is brought
+	// to the front before it's captured.
 
 	// The language list lives in copy.js, so ask the page for it.
 	await page.goto(screensUrl('en'), { waitUntil: 'load' });
@@ -46,6 +64,7 @@ try {
 	const langs = asked.length ? asked : available;
 
 	for (const lang of langs) {
+		await page.bringToFront();
 		await page.goto(screensUrl(lang), { waitUntil: 'load' });
 		const report = await page.evaluate(() => window.screensReady);
 
@@ -60,19 +79,37 @@ try {
 			continue;
 		}
 
-		// Start from an empty folder so a screen that's been removed doesn't linger.
+		// Start from empty folders so a screen that's been removed doesn't linger.
 		await rm(outDir(lang), { recursive: true, force: true });
-		await mkdir(outDir(lang), { recursive: true });
+		for (const size of Object.keys(SIZES)) await mkdir(outDir(lang, size), { recursive: true });
+
 		for (const screen of await page.$$('.screen')) {
 			const name = await screen.evaluate((el) => el.dataset.name);
-			const file = `${outDir(lang)}${name}.png`;
-			await screen.screenshot({ path: file });
+			const render = await screen.screenshot();
 
-			const { width, height } = await pngSize(file);
-			const ok = width === SIZE.width && height === SIZE.height;
-			if (!ok) failed = true;
-			console.log(`  ${ok ? '✓' : '✗'} ${name}.png  ${width} × ${height}`);
+			const results = [];
+			for (const [size, { width, height }] of Object.entries(SIZES)) {
+				const file = `${outDir(lang, size)}${name}.png`;
+				const info = await sharp(render).resize(width, height, { fit: 'cover' }).png().toFile(file);
+				const ok = info.width === width && info.height === height;
+				if (!ok) failed = true;
+				results.push(`${ok ? '✓' : '✗'} ${info.width} × ${info.height}`);
+			}
+			console.log(`  ${name}.png  ${results.join('  ')}`);
 		}
+
+		if (lang !== 'en') continue;
+		await headerPage.bringToFront();
+		await headerPage.goto(pageUrl('header.html', lang), { waitUntil: 'load' });
+		await headerPage.evaluate(() => window.screensReady);
+		const render = await (await headerPage.$('.header')).screenshot();
+		const info = await sharp(render)
+			.removeAlpha()
+			.png({ compressionLevel: 9, adaptiveFiltering: true, effort: 10 })
+			.toFile(`${outDir(lang)}header.png`);
+		const ok = info.width === HEADER_SIZE.width && info.height === HEADER_SIZE.height;
+		if (!ok) failed = true;
+		console.log(`  header.png  ${ok ? '✓' : '✗'} ${info.width} × ${info.height}  ${(info.size / 1e6).toFixed(1)} MB`);
 	}
 } finally {
 	await browser.close();

@@ -1,17 +1,27 @@
 # Skelly — App Store screenshots
 
 The screenshots are HTML: `screens.html` lays out each one at 440 × 956 CSS
-px, and `npm run export` renders them with Chrome at 3×, which is
-1320 × 2868: the 6.9" iPhone size. App Store Connect scales that down for
-every smaller iPhone.
+px, and `npm run export` renders them with Chrome at 3×, at the two iPhone
+sizes App Store Connect takes:
+
+- `export/<lang>/iphone-medium/`: 1206 × 2622, the 6.1"/6.3" size it
+  requires ("iPhone with Dynamic Island, medium display")
+- `export/<lang>/iphone-large/`: 1320 × 2868, the optional 6.9" size
+
+It also renders `header.html`, the 21:9 product page header, to
+`export/en/header.png` at 3840 × 1646. Every language uses that English
+header. It uses the landing page's hero
+art from `art/hero-large.jpg`, the 2752 × 1536 original.
 
 ## Files
 
 ```text
 screens.html       the screens: layout, phone frames, callouts
-copy.js            the words on each screen, by language
+header.html        the product page header
+copy.js            the words on each screen and the header, by language
+art/               the hero art at full size, for the header
 captures/<lang>/   simulator screenshots shown inside the phones
-export/<lang>/     the finished PNGs to upload
+export/<lang>/     the finished PNGs to upload, by size
 sim.mjs            readies the screenshots simulator for a region
 capture.mjs        saves a simulator screenshot into captures/
 export.mjs         renders export/ from screens.html
@@ -79,7 +89,7 @@ use another checkout.
    npm run export -- en    # just English
    ```
 
-   Each PNG is checked to be exactly 1320 × 2868. The export also lists any
+   Each PNG is checked to be exactly its size. The export also lists any
    lines or captures a language borrows from English.
 
 ## Adding a language

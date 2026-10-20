@@ -188,8 +188,15 @@
 	}
 
 	/* Magnifies part of the capture in place: --x, --y, --w and --h are the
-	   region as fractions of the capture, --zoom how much bigger it gets. */
+	   region as fractions of the capture, --zoom how much bigger it gets.
+	   A data-style-<lang> attribute overrides them for a language whose
+	   button is a different width ("Bare Bones Activo").
+	   --mask paints copies of the callout that far to each side in --mask-color,
+	   to hide the edges of anything the magnified callout half covers (the
+	   toolbar's headphones and download buttons beside a narrow button). */
 	.callout {
+		--mask: 0px;
+		--mask-color: transparent;
 		--cw: calc(var(--w) * var(--img-w) * var(--zoom));
 		--ch: calc(var(--h) * var(--img-w) * var(--capture-ratio) * var(--zoom));
 		position: absolute;
@@ -204,6 +211,8 @@
 			calc(var(--y) * var(--img-w) * var(--capture-ratio) * var(--zoom) * -1);
 		box-shadow:
 			0 0 0 2px var(--text),
+			calc(var(--mask) * -1) 0 0 0 var(--mask-color),
+			var(--mask) 0 0 0 var(--mask-color),
 			0 20px 44px rgb(0 0 0 / 0.7);
 	}
 
@@ -293,7 +302,7 @@
 				<div class="phone-screen">
 					<img data-capture="page.png" alt="">
 					<!-- the Bare Bones On button -->
-					<div class="callout" data-capture="page.png" style="--x: 0.296; --y: 0.9256; --w: 0.408; --h: 0.0408; --zoom: 1.5"></div>
+					<div class="callout" data-capture="page.png" style="--x: 0.296; --y: 0.9256; --w: 0.408; --h: 0.0408; --zoom: 1.5; --mask: 16px; --mask-color: #202020" data-style-es="--x: 0.2655; --w: 0.469; --mask: 0px" data-style-it="--x: 0.2695; --w: 0.461; --mask: 0px" data-style-fr="--x: 0.2663; --w: 0.4682; --mask: 0px" data-style-nl="--x: 0.2862; --w: 0.4276; --mask: 13px"></div>
 				</div>
 			</div>
 		</section>
@@ -391,6 +400,10 @@
 			if (text == null) report.missingCopy.push(`${key}.${field}`);
 			el.innerHTML = text ?? COPY.en[key][field];
 		}
+	}
+
+	for (const el of document.querySelectorAll(`[data-style-${lang.toLowerCase()}]`)) {
+		el.style.cssText += `; ${el.getAttribute(`data-style-${lang.toLowerCase()}`)}`;
 	}
 
 	// Shrink any line that runs wider than its column (long translations)

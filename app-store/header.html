@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skelly App Store Header</title>
+<style>
+	/* The product page header: 21:9, laid out at 1920 × 823 CSS px and
+	   exported at 2× to 3840 × 1646 by `npm run export`. It follows the
+	   landing page's wide hero: the diorama on the left, and the words over
+	   the night sky on the right with a soft glow behind them. */
+	:root {
+		--text: #f4f1ea;
+		--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+		--font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+		margin: 0;
+	}
+
+	body {
+		background: #0a0a09;
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		padding: 40px 24px;
+	}
+
+	.header {
+		position: relative;
+		width: 1920px;
+		height: 823px;
+		margin-inline: auto;
+		overflow: hidden;
+		background: #0c1030;
+		color: var(--text);
+	}
+
+	/* The art is 2752 × 1536, so filling the width crops its top and bottom;
+	   43% keeps the captain's hat and most of the board in frame. */
+	.art {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: 50% 43%;
+	}
+
+	.copy {
+		position: absolute;
+		top: 31%;
+		left: 57%;
+		right: 5%;
+		isolation: isolate;
+		display: grid;
+		gap: 18px;
+		text-shadow: 2px 4px 4px #000000d4;
+	}
+
+	/* Soft night-sky glow behind the text to calm the spray and whitewater. */
+	.copy::before {
+		content: '';
+		position: absolute;
+		inset: -30% -14% -40% -16%;
+		z-index: -1;
+		background: radial-gradient(
+			closest-side,
+			rgb(12 16 46 / 0.72),
+			rgb(12 16 46 / 0.45) 65%,
+			transparent
+		);
+	}
+
+	.tag {
+		font-family: var(--font-mono);
+		font-size: 44px;
+		color: #cfd3ea;
+	}
+
+	/* Lines only break at a <br>; fitText() shrinks it if a line runs wide. */
+	.headline {
+		font-size: 104px;
+		font-weight: 700;
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		white-space: nowrap;
+	}
+</style>
+</head>
+<body>
+
+<section class="header" data-name="header">
+	<img class="art" src="art/hero-large.jpg" alt="">
+	<div class="copy">
+		<p class="tag" data-copy="tag"></p>
+		<h1 class="headline" data-copy="headline"></h1>
+	</div>
+</section>
+
+<script src="copy.js"></script>
+<script>
+	const requested = new URLSearchParams(location.search).get('lang');
+	const lang = requested in COPY ? requested : 'en';
+	document.documentElement.lang = lang;
+
+	const report = { lang, missingCopy: [], englishCaptures: [], brokenCaptures: [] };
+	for (const el of document.querySelectorAll('[data-copy]')) {
+		const field = el.dataset.copy;
+		const text = COPY[lang].header?.[field];
+		if (text == null) report.missingCopy.push(`header.${field}`);
+		el.innerHTML = text ?? COPY.en.header[field];
+	}
+
+	function fitText() {
+		for (const el of document.querySelectorAll('.headline')) {
+			let size = parseFloat(getComputedStyle(el).fontSize);
+			while (el.scrollWidth > el.clientWidth && size > 24) {
+				el.style.fontSize = `${--size}px`;
+			}
+		}
+	}
+
+	window.screensReady = (async () => {
+		await document.fonts.ready;
+		fitText();
+		await Promise.all([...document.images].map((img) => img.decode().catch(() => {})));
+		return report;
+	})();
+</script>
+</body>
+</html>

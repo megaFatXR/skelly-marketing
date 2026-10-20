@@ -2,19 +2,21 @@
 // Skelly, sets the simulator's region and language, and installs the app
 // fresh, so it opens as on first launch with that region's sites preloaded.
 //
-//   npm run sim -- US       United States, in English
-//   npm run sim -- FR fr    France, in French
+//   npm run sim -- US          United States, in English
+//   npm run sim -- FR fr       France, in French
+//   npm run sim -- US --ipad   the iPad simulator instead
 //
 // Builds from ~/Workspace/Skelly, or the checkout in SKELLY_REPO.
 import { execFileSync } from 'node:child_process';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cleanStatusBar, DEVICE_NAME, ensureDevice, simctl } from './simulator.mjs';
+import { cleanStatusBar, DEVICES, ensureDevice, parseDevice, simctl } from './simulator.mjs';
 
-const [region, language = 'en'] = process.argv.slice(2);
+const { kind, rest } = parseDevice(process.argv.slice(2));
+const [region, language = 'en'] = rest;
 if (!/^[A-Z]{2}$/.test(region ?? '')) {
-	console.error('Usage: npm run sim -- <REGION> [language], e.g. npm run sim -- US');
+	console.error('Usage: npm run sim -- <REGION> [language] [--ipad], e.g. npm run sim -- US');
 	process.exit(1);
 }
 
@@ -38,7 +40,7 @@ execFileSync(
 	{ stdio: 'inherit' },
 );
 
-const { udid, state } = ensureDevice();
+const { udid, state } = ensureDevice(kind);
 
 // The region and language are read when the simulator starts, so set them
 // on a booted simulator and then restart it.
@@ -58,5 +60,5 @@ cleanStatusBar(udid);
 simctl('launch', udid, BUNDLE_ID);
 execFileSync('open', ['-a', 'Simulator', '--args', '-CurrentDeviceUDID', udid]);
 
-console.log(`\n${DEVICE_NAME} is on ${language}_${region} with a fresh Skelly.`);
-console.log('Bring up a screen, then: npm run capture -- <name>');
+console.log(`\n${DEVICES[kind].name} is on ${language}_${region} with a fresh Skelly.`);
+console.log(`Bring up a screen, then: npm run capture -- <name> ${language}${kind === 'ipad' ? ' --ipad' : ''}`);

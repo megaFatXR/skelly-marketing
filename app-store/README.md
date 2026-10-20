@@ -8,6 +8,11 @@ sizes App Store Connect takes:
   requires ("iPhone with Dynamic Island, medium display")
 - `export/<lang>/iphone-large/`: 1320 × 2868, the optional 6.9" size
 
+For languages with iPad captures it also renders
+`export/<lang>/ipad/` at 2064 × 2752, the 13" iPad size App Store Connect
+requires because Skelly runs on iPad. `screens.html?device=ipad` previews
+that layout.
+
 It also renders `header.html`, the 21:9 product page header, to
 `export/en/header.png` at 3840 × 1646. Every language uses that English
 header. It uses the landing page's hero
@@ -19,6 +24,7 @@ art from `art/hero-large.jpg`, the 2752 × 1536 original.
 screens.html       the screens: layout, phone frames, callouts
 header.html        the product page header
 copy.js            the words on each screen and the header, by language
+listing/<lang>.json  the store listing text for each language
 art/               the hero art at full size, for the header
 captures/<lang>/   simulator screenshots shown inside the phones
 export/<lang>/     the finished PNGs to upload, by size
@@ -26,6 +32,8 @@ sim.mjs            readies the screenshots simulator for a region
 capture.mjs        saves a simulator screenshot into captures/
 export.mjs         renders export/ from screens.html
 simulator.mjs      what sim.mjs and capture.mjs share
+check-listing.mjs  checks listing/ against App Store Connect's limits
+measure.mjs        prints a capture's Bare Bones callout numbers
 ```
 
 The hero art and the winking skelly come straight from `web/src/assets/`, so
@@ -91,6 +99,23 @@ use another checkout.
 
    Each PNG is checked to be exactly its size. The export also lists any
    lines or captures a language borrows from English.
+
+## iPad
+
+Add `--ipad` to `npm run sim` and `npm run capture`. That uses a second
+simulator, "Skelly Screenshots iPad" (iPad Pro 13"), and saves captures to
+`captures/<lang>/ipad/`. The callouts take their iPad positions from
+`data-style-ipad` (and `data-style-ipad-<lang>`) in `screens.html`. After
+re-capturing a page, `npm run measure -- captures/en/ipad/page.png` prints
+the Bare Bones button's numbers.
+
+## Store listing text
+
+`listing/<lang>.json` holds each language's App Store Connect text: subtitle,
+promotional text, description, keywords and URLs. `npm run listing` checks
+them against Apple's limits (30, 170, 4000 and 100 characters). Spanish is
+used for both Spanish (Spain) and Spanish (Mexico), which covers Latin
+America.
 
 ## Adding a language
 

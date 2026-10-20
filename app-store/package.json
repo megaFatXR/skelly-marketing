@@ -5,7 +5,9 @@
   "scripts": {
     "sim": "node sim.mjs",
     "capture": "node capture.mjs",
-    "export": "node export.mjs"
+    "export": "node export.mjs",
+    "listing": "node check-listing.mjs",
+    "measure": "node measure.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^25.14.0",

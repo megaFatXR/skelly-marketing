@@ -1,0 +1,10 @@
+{
+  "name": "Skelly: Bare Bones Browser",
+  "subtitle": "No ads, trackers or pop-ups",
+  "promotionalText": "JavaScript is off by default, so ads, trackers and cookie banners never load. Pin your favorite news sites, read in Reader, or have any page read aloud.",
+  "description": "Skelly is a browser that strips websites down to the bone. JavaScript is off by default, so most ads, trackers, cookie banners and pop-ups never get the chance to load. What's left is the page you came to read, and it loads in a blink.\n\nBARE BONES\n• JavaScript is off on every site until you say otherwise. The Bare Bones button shows it for the site you're on, and one switch turns scripts back on for a site that needs them.\n• The empty boxes that ads and script-only pictures leave behind are hidden.\n• For finer control, block single script files on a site, or any script whose address contains a pattern.\n• Pages without the extra weight go easy on your data and battery.\n\nYOUR NEWS, ONE TAP AWAY\n• Your favorite sites as tiles on the home screen, starting with popular ones for your region.\n• Latest: the newest headlines from all your sites in one feed, as picture cards or a compact list.\n• Save articles to read offline, pictures included.\n\nREAD YOUR WAY\n• Reader shows just the article, in the text size, font and theme you like: Auto, Light, Sepia or Dark.\n• Read aloud turns your news into a podcast. Sit back and let Skelly read any page to you.\n• Dark by default, with Light or System in Settings.\n\nPRIVACY FIRST\n• Skelly collects nothing. No accounts, no analytics.\n• Site icons and names come straight from the sites themselves, never from a third-party service that would learn what you read.\n• Search with DuckDuckGo or Google, your choice.\n\nWhat you browse, search and read in Skelly is yours alone.",
+  "keywords": "adblock,ad blocker,javascript,privacy,tracker,reader,news,read aloud,offline,popup,cookie,fast,web",
+  "supportUrl": "https://skelly.surf/",
+  "marketingUrl": "https://skelly.surf/",
+  "privacyPolicyUrl": "https://skelly.surf/privacy/"
+}

@@ -167,6 +167,10 @@
 		transform: translateX(-50%);
 	}
 
+	.phone.compact {
+		--phone-w: 270px;
+	}
+
 	/* A bigger phone that runs off the bottom edge, for captures whose
 	   interesting part is at the top. */
 	.phone.bleed {
@@ -190,7 +194,8 @@
 	/* Magnifies part of the capture in place: --x, --y, --w and --h are the
 	   region as fractions of the capture, --zoom how much bigger it gets.
 	   A data-style-<lang> attribute overrides them for a language whose
-	   button is a different width ("Bare Bones Activo").
+	   button is a different width ("Bare Bones Activo"), and data-style-ipad
+	   and data-style-ipad-<lang> do the same for the iPad captures.
 	   --mask paints copies of the callout that far to each side in --mask-color,
 	   to hide the edges of anything the magnified callout half covers (the
 	   toolbar's headphones and download buttons beside a narrow button). */
@@ -266,6 +271,86 @@
 		width: 380px;
 		transform: translateX(-50%);
 	}
+
+	/* iPad: screens.html?device=ipad lays each screen out at 1032 × 1376 CSS
+	   px, exported at 2× to 2064 × 2752, the 13" iPad size. Its captures come
+	   from the iPad Pro 13" simulator, which is 2064 × 2752 too. */
+
+	[data-device='ipad'] {
+		--capture-ratio: calc(2752 / 2064);
+	}
+
+	[data-device='ipad'] .screen {
+		width: 1032px;
+		height: 1376px;
+	}
+
+	[data-device='ipad'] .copy {
+		padding: 96px 80px 0;
+	}
+
+	[data-device='ipad'] .tag {
+		font-size: 30px;
+		margin-bottom: 20px;
+	}
+
+	[data-device='ipad'] .headline {
+		font-size: 76px;
+	}
+
+	[data-device='ipad'] .sub {
+		font-size: 28px;
+		margin-top: 24px;
+	}
+
+	/* An iPad frame: a thinner bezel and squarer corners than the phone. */
+	[data-device='ipad'] .phone {
+		--phone-w: 640px;
+		--bezel: 14px;
+		bottom: 56px;
+		padding: var(--bezel);
+		border-radius: calc((var(--phone-w) - 2 * var(--bezel)) * 0.03 + var(--bezel));
+	}
+
+	[data-device='ipad'] .phone.compact {
+		--phone-w: 600px;
+	}
+
+	[data-device='ipad'] .phone.bleed {
+		--phone-w: 800px;
+		top: 440px;
+	}
+
+	[data-device='ipad'] .phone-screen {
+		--img-w: calc(var(--phone-w) - 2 * var(--bezel));
+	}
+
+	[data-device='ipad'] .phone-screen > img {
+		aspect-ratio: 2064 / 2752;
+		border-radius: calc(var(--img-w) * 0.03);
+	}
+
+	[data-device='ipad'] .hero .art {
+		height: 900px;
+		object-position: 26% 0;
+	}
+
+	[data-device='ipad'] .hero .copy {
+		padding: 0 80px 140px;
+	}
+
+	[data-device='ipad'] .hero .tag {
+		font-size: 36px;
+	}
+
+	[data-device='ipad'] .hero .headline {
+		font-size: 88px;
+	}
+
+	[data-device='ipad'] .privacy .mascot {
+		bottom: 190px;
+		width: 580px;
+	}
 </style>
 </head>
 <body>
@@ -274,6 +359,10 @@
 	<h1>Skelly — App Store screens</h1>
 	<p>440 × 956 each, exported at 3× to 1320 × 2868 (6.9" iPhone) by <code>npm run export</code></p>
 	<nav class="langs" aria-label="Language"></nav>
+	<nav class="langs" aria-label="Device">
+		<a href="?">iphone</a>
+		<a href="?device=ipad">ipad</a>
+	</nav>
 </header>
 
 <main class="screens">
@@ -298,11 +387,11 @@
 				<p class="sub" data-copy="sub"></p>
 			</div>
 			<!-- a little smaller, to leave room for the four-line sub -->
-			<div class="phone" style="--phone-w: 270px">
+			<div class="phone compact">
 				<div class="phone-screen">
 					<img data-capture="page.png" alt="">
 					<!-- the Bare Bones On button -->
-					<div class="callout" data-capture="page.png" style="--x: 0.296; --y: 0.9256; --w: 0.408; --h: 0.0408; --zoom: 1.5; --mask: 16px; --mask-color: #202020" data-style-es="--x: 0.2655; --w: 0.469; --mask: 0px" data-style-it="--x: 0.2695; --w: 0.461; --mask: 0px" data-style-fr="--x: 0.2663; --w: 0.4682; --mask: 0px" data-style-nl="--x: 0.2862; --w: 0.4276; --mask: 13px"></div>
+					<div class="callout" data-capture="page.png" style="--x: 0.296; --y: 0.9256; --w: 0.408; --h: 0.0408; --zoom: 1.5; --mask: 16px; --mask-color: #202020" data-style-es="--x: 0.2655; --w: 0.469; --mask: 0px" data-style-it="--x: 0.2695; --w: 0.461; --mask: 0px" data-style-fr="--x: 0.2663; --w: 0.4682; --mask: 0px" data-style-nl="--x: 0.2862; --w: 0.4276; --mask: 13px" data-style-ipad="--x: 0.4205; --y: 0.9637; --w: 0.1589; --h: 0.0247; --zoom: 1.7; --mask: 0px"></div>
 				</div>
 			</div>
 		</section>
@@ -352,7 +441,7 @@
 				<div class="phone-screen">
 					<img data-capture="listen.png" alt="">
 					<!-- the read aloud player -->
-					<div class="callout" data-capture="listen.png" style="--x: 0; --y: 0.8063; --w: 1; --h: 0.0595; --zoom: 1.12; --round: 0.22"></div>
+					<div class="callout" data-capture="listen.png" style="--x: 0; --y: 0.8063; --w: 1; --h: 0.0595; --zoom: 1.12; --round: 0.22" data-style-ipad="--y: 0.8870; --h: 0.0378; --zoom: 1.08; --round: 0.25"></div>
 				</div>
 			</div>
 		</section>
@@ -375,14 +464,21 @@
 
 <script src="copy.js"></script>
 <script>
-	const requested = new URLSearchParams(location.search).get('lang');
+	const params = new URLSearchParams(location.search);
+	const requested = params.get('lang');
 	const lang = requested in COPY ? requested : 'en';
+	const device = params.get('device') === 'ipad' ? 'ipad' : 'iphone';
 	document.documentElement.lang = lang;
+	document.documentElement.dataset.device = device;
+	if (device === 'ipad') {
+		document.querySelector('.page-header p').innerHTML =
+			'1032 × 1376 each, exported at 2× to 2064 × 2752 (13" iPad) by <code>npm run export</code>';
+	}
 
 	const nav = document.querySelector('.langs');
 	for (const code of Object.keys(COPY)) {
 		const link = document.createElement('a');
-		link.href = `?lang=${code}`;
+		link.href = `?lang=${code}${device === 'ipad' ? '&device=ipad' : ''}`;
 		link.textContent = code;
 		if (code === lang) link.setAttribute('aria-current', 'page');
 		nav.append(link);
@@ -402,8 +498,11 @@
 		}
 	}
 
-	for (const el of document.querySelectorAll(`[data-style-${lang.toLowerCase()}]`)) {
-		el.style.cssText += `; ${el.getAttribute(`data-style-${lang.toLowerCase()}`)}`;
+	const overrides = device === 'ipad' ? ['ipad', `ipad-${lang.toLowerCase()}`] : [lang.toLowerCase()];
+	for (const key of overrides) {
+		for (const el of document.querySelectorAll(`[data-style-${key}]`)) {
+			el.style.cssText += `; ${el.getAttribute(`data-style-${key}`)}`;
+		}
 	}
 
 	// Shrink any line that runs wider than its column (long translations)
@@ -425,14 +524,15 @@
 			img.src = src;
 		});
 
-	// Captures come from captures/<lang>/, or the English one if that
-	// language has none yet.
+	// Captures come from captures/<lang>/ (captures/<lang>/ipad/ for the
+	// iPad), or the English one if that language has none yet.
 	async function loadCaptures() {
 		const files = new Set([...document.querySelectorAll('[data-capture]')].map((el) => el.dataset.capture));
 		const sources = {};
 		for (const file of files) {
-			const own = `captures/${lang}/${file}`;
-			const english = `captures/en/${file}`;
+			const folder = device === 'ipad' ? 'ipad/' : '';
+			const own = `captures/${lang}/${folder}${file}`;
+			const english = `captures/en/${folder}${file}`;
 			if (await loads(own)) sources[file] = own;
 			else if (lang !== 'en' && (await loads(english))) {
 				sources[file] = english;
